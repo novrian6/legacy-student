@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    container_name: legacy_php
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: legacy_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: studentdb
+    ports:
+      - "3306:3306"

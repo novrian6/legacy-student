@@ -1,0 +1,15 @@
+<?php
+// Legacy database connection (PHP 5 style)
+class DB {
+    var $conn;
+
+    function DB() { // constructor style old PHP 5
+        $this->conn = mysql_connect("localhost", "root", "root");
+        mysql_select_db("studentdb", $this->conn);
+    }
+
+    function query($sql) {
+        return mysql_query($sql, $this->conn);
+    }
+}
+?>
