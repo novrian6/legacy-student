@@ -1,25 +1,12 @@
 <?php
-// db.php - updated for mysqli (PHP 5.6+)
-class DB {
-    var $conn;
+$host = 'db';
+$user = 'root';
+$pass = 'root';
+$dbname = 'legacydb';
 
-    function DB() {
-        $this->conn = mysqli_connect("db", "root", "root", "studentdb");
-        if (!$this->conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-    }
+$conn = mysqli_connect($host, $user, $pass, $dbname);
 
-    function query($sql) {
-        return mysqli_query($this->conn, $sql);
-    }
-
-    function fetch($result) {
-        return mysqli_fetch_assoc($result);
-    }
-
-    function close() {
-        mysqli_close($this->conn);
-    }
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
 ?>

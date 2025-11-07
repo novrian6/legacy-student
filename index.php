@@ -1,39 +1,44 @@
 <?php
-include("Student.php");
-$student = new Student();
+include 'db.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $student->addStudent($_POST['name'], $_POST['email'], $_POST['grade']);
-    echo "<p>Student added successfully!</p>";
-}
-
-$result = $student->getAllStudents();
+// Ambil semua data mahasiswa
+$query = "SELECT * FROM students ORDER BY id DESC";
+$result = mysqli_query($conn, $query);
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Management (Legacy)</title>
+    <title>Daftar Mahasiswa</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<h2>Add New Student</h2>
-<form method="POST" action="">
-    Name: <input type="text" name="name"><br>
-    Email: <input type="text" name="email"><br>
-    Grade: <input type="text" name="grade"><br>
-    <input type="submit" value="Add Student">
-</form>
-
-<h2>Student List</h2>
-<table border="1" cellpadding="5">
-    <tr><th>ID</th><th>Name</th><th>Email</th><th>Grade</th></tr>
-    <?php while($row = mysql_fetch_assoc($result)) { ?>
+    <h1>Daftar Mahasiswa</h1>
+    <a href="add_student.php" class="button">Tambah Mahasiswa</a>
+    <table border="1" cellpadding="8" cellspacing="0">
         <tr>
-            <td><?= $row['id'] ?></td>
-            <td><?= $row['name'] ?></td>
-            <td><?= $row['email'] ?></td>
-            <td><?= $row['grade'] ?></td>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Jurusan</th>
+            <th>Aksi</th>
         </tr>
-    <?php } ?>
-</table>
+        <?php if (mysqli_num_rows($result) > 0): ?>
+            <?php while ($row = mysqli_fetch_assoc($result)): ?>
+            <tr>
+                <td><?= $row['id'] ?></td>
+                <td><?= htmlspecialchars($row['name']) ?></td>
+                <td><?= htmlspecialchars($row['email']) ?></td>
+                <td><?= htmlspecialchars($row['major']) ?></td>
+                <td>
+                    <a href="edit_student.php?id=<?= $row['id'] ?>">Edit</a> |
+                    <a href="delete_student.php?id=<?= $row['id'] ?>" onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
+                </td>
+            </tr>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <tr><td colspan="5">Belum ada data mahasiswa.</td></tr>
+        <?php endif; ?>
+    </table>
 </body>
 </html>
